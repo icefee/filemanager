@@ -3,4 +3,6 @@
 一个简单的文件管理器
 
 Clone it
-run by $node index
+
+
+运行 $node index
