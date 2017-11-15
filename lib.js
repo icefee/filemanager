@@ -13,6 +13,12 @@ function init() {
 		uploadFile(formData)
 	});
 
+	$('.newfolder').on('click', function(e) {
+		if(window.prompt('输入目录名称')) {
+			createFolder(name)
+		}
+	})
+
 	$(document).on('click', '.files .dir', function(e) {
 		var _path = $(this).data('dir');
 		listFiles(_path);
@@ -74,6 +80,24 @@ function listFiles(path) {
 		},
 		error: function(err) {
 			console.log('error:' + err)
+		}
+	}
+	$.ajax(ops)
+}
+
+function createFolder(name) {
+	var ops = {
+		type: 'GET',
+		url: '/?api=mkdir&path=' + curPath + '/' + name,
+		contentType: 'application/json',
+		success: function(data) {
+			if(data.status == 0) {
+				alert(data.message);
+			}
+			else listFiles(curPath)
+		},
+		error: function(err) {
+			console.log(err)
 		}
 	}
 	$.ajax(ops)

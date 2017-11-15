@@ -142,6 +142,9 @@ var header = `<div class="header"><h4>All Files</h4></div>
 <a class="btn" id="upload-file"><span class="status">上传文件</span><input type="file" class="upload" title="上传文件" /><span class="process"></span></a>
 </li>
 <li>
+<a class="btn newfolder" href="javascript:">新建文件夹</a>
+</li>
+<li>
 <a class="btn del" href="javascript:">删除文件</a>
 </li>
 </ul>
@@ -221,6 +224,26 @@ var server = http.createServer((request, response) => {
 			'Content-Type': 'text/html'
 		});
 		response.write(render(output), 'utf8')
+		response.end();
+	}
+	else if(api_id == 'mkdir') {
+		let _query_path = paras.path ? paras.path : ''
+		let _path = managerRoot + _query_path;
+		let statusCode = 0, message;
+		if(_path) {
+			if(!fs.existsSync(_path)) {
+				fs.mkdirSync(_path);
+				statusCode = 1;
+				message = '创建成功'
+			}
+			else {
+				message = '目录已存在,无法创建'
+			}
+		}
+		response.writeHead(200, {
+			'Content-Type': 'application/json'
+		});
+		response.write(`{"status": ${statusCode}, "message": "${message}"}`, 'utf8')
 		response.end();
 	}
 	else {
