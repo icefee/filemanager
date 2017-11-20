@@ -133,6 +133,26 @@ var styleSheet = `<style type="text/css">
 	color: orange;
 	background: unset;
 }
+.contextmenu {
+	display: none;
+	position: fixed;
+	width: 120px;
+	background: #fff;
+	box-shadow:2px 2px 15px rgba(0, 0, 0, .2);
+}
+.contextmenu ul li {
+	font-size: 13px;
+	list-style-type: none;
+}
+.contextmenu ul li a{
+	display: block;
+	text-indent: 15px;
+	line-height: 30px;
+	cursor: pointer;
+}
+.contextmenu ul li:hover {
+	background: #eee;
+}
 </style>`;
 
 var header = `<div class="header"><h4>All Files</h4></div>
@@ -143,9 +163,6 @@ var header = `<div class="header"><h4>All Files</h4></div>
 </li>
 <li>
 <a class="btn newfolder" href="javascript:">新建文件夹</a>
-</li>
-<li>
-<a class="btn del" href="javascript:">删除文件</a>
 </li>
 </ul>
 </div>`;
@@ -246,6 +263,40 @@ var server = http.createServer((request, response) => {
 		response.write(`{"status": ${statusCode}, "message": "${message}"}`, 'utf8')
 		response.end();
 	}
+	else if(api_id == 'delete') {
+		let _query_path = paras.path ? paras.path : ''
+		let _path = managerRoot + _query_path;
+		let statusCode = 0, message;
+		function deletePath(path) {
+			var files = fs.readdirSync(path);
+			files.forEach((file, index) => {
+				var curPath = path + '/' + file;
+				if(fs.statSync(curPath).isDirectory()) {
+					deletePath(curPath)
+				}
+				else {
+					fs.unlinkSync(curPath);
+				}
+				fs.rmdirSync(path);
+			})
+		}
+		if(fs.existsSync(_path)) {
+			if(fs.statSync(_path).isDirectory()) {
+				deletePath(_path)
+			}
+			else {
+				fs.unlinkSync(_path);
+			}
+			statusCode = 1
+			message = '删除成功'
+		}
+		else message = '路径不存在'
+		response.writeHead(200, {
+			'Content-Type': 'application/json'
+		});
+		response.write(`{"status": ${statusCode}, "message": "${message}"}`, 'utf8')
+		response.end();
+	}
 	else {
 		_res_body = `<!DOCTYPE html><html>
 		<head>
@@ -275,7 +326,7 @@ function render(json) {
 	}
 	for(let i in _list) {
 		let item = _list[i];
-		html += '<li>'
+		html += '<li class="item">'
 		if(item.isDir) {
 			html += `<div class="block dir" data-dir="${json.relativePath + '/' + item.name}">`
 		}
