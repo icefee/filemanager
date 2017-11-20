@@ -167,7 +167,8 @@ var header = `<div class="header"><h4>All Files</h4></div>
 </ul>
 </div>`;
 
-var js = `<script type="text/javascript">${fs.readFileSync('./lib.js')}</script>`
+var js = `<script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+<script type="text/javascript">${fs.readFileSync('./lib.js')}</script>`
 
 var server = http.createServer((request, response) => {
 
@@ -303,7 +304,7 @@ var server = http.createServer((request, response) => {
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0" />
 		<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 		<meta http-equiv="x-ua-compatible" content="IE=edge" />
-		<title>File Manger</title>${styleSheet}<script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script></head><body>${header}<div class="files"></div>${js}</body></html>`
+		<title>File Manger</title>${styleSheet}</head><body>${header}<div class="files"></div>${js}</body></html>`
 		response.writeHead(200, {
 			'Content-Type': 'text/html'
 		});
