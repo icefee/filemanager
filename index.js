@@ -195,7 +195,7 @@ var server = http.createServer((request, response) => {
 			response.writeHead(200, {
 				'Content-Type': 'text/html'
 			});
-			response.write(`no supported method.`, 'utf8');
+			response.write(_res_body, 'utf8');
 			response.end();
 		}
 		else {
