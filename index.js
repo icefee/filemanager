@@ -192,6 +192,11 @@ var server = http.createServer((request, response) => {
 	if(api_id == 'upload') {
 		if(request.method == 'GET') {
 			_res_body = 'no supported method.'
+			response.writeHead(200, {
+				'Content-Type': 'text/html'
+			});
+			response.write(`no supported method.`, 'utf8');
+			response.end();
 		}
 		else {
 			let statusCode = 0;
