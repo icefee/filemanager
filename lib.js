@@ -15,7 +15,8 @@ function init() {
 	});
 
 	$('.newfolder').on('click', function(e) {
-		if(window.prompt('输入目录名称')) {
+		var name = window.prompt('输入目录名称')
+		if(name) {
 			createFolder(name)
 		}
 	})

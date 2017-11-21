@@ -270,6 +270,10 @@ var server = http.createServer((request, response) => {
 		let statusCode = 0, message;
 		function deletePath(path) {
 			var files = fs.readdirSync(path);
+			// if(files.length == 0) {
+			// 	fs.rmdirSync(path);
+			// 	return;
+			// }
 			files.forEach((file, index) => {
 				var curPath = path + '/' + file;
 				if(fs.statSync(curPath).isDirectory()) {
@@ -278,8 +282,8 @@ var server = http.createServer((request, response) => {
 				else {
 					fs.unlinkSync(curPath);
 				}
-				fs.rmdirSync(path);
-			})
+			});
+			fs.rmdirSync(path);
 		}
 		if(fs.existsSync(_path)) {
 			if(fs.statSync(_path).isDirectory()) {
